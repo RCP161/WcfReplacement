@@ -61,9 +61,9 @@ namespace Prototype.Subscriber.Presentation
             while (scenario == null)
             {
                 Console.WriteLine();
-                Console.WriteLine("Please enter the port of the publisher port number:");
+                Console.WriteLine("Please enter the scenario number:");
 
-                scenario = ReadPortNumber();
+                scenario = ReadScenarioNumber();
             }
 
             _model.PublisherPort = scenario.Value;

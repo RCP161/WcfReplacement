@@ -9,6 +9,6 @@ namespace Prototype.Subscriber.Contract
 {
     internal interface ICommunicationService
     {
-        bool Test(SubscriberM subscriber);
+        bool Test(string IpAdress, int Port);
     }
 }
