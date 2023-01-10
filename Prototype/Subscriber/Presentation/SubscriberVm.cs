@@ -7,82 +7,73 @@ namespace Prototype.Subscriber.Presentation
 {
     internal class SubscriberVm
     {
-        private readonly SubscriberM _model;
+        private readonly SubscribeConfig _subscribeConfig;
         private readonly ICommunicationService _communicationService;
 
-        internal SubscriberVm()
+        public SubscriberVm(int portNumber)
         {
-            _model = new SubscriberM();
+            _subscribeConfig = new SubscribeConfig()
+            {
+                PortNumber = portNumber
+            };
+
             _communicationService = ServiceLocator.Default.ResolveType<ICommunicationService>();
         }
 
         internal void Start()
         {
-            AskForPuplisherPort();
-            AskForScenario();
+            StartServer();
+            SubscribeOnPublisher();
+            WaitForStop();
         }
 
-        #region Publisher
-
-        private void AskForPuplisherPort()
+        private void StartServer()
         {
-            int? portNumber = null;
-            while (portNumber == null)
+            _communicationService.StartHostServer(_subscribeConfig);
+        }
+
+        #region Subscribe
+
+        private void SubscribeOnPublisher()
+        {
+            var subscribed = false;
+
+            while (!subscribed)
             {
                 Console.WriteLine();
                 Console.WriteLine("Please enter the port of the publisher port number:");
 
-                portNumber = ReadPortNumber();
+                subscribed = TrySubscibtion();
             }
-
-            _model.PublisherPort = portNumber.Value;
         }
 
-        private int? ReadPortNumber()
+        private bool TrySubscibtion()
         {
             var portText = Console.ReadLine();
             var isNumber = Int32.TryParse(portText, out int portNumber);
 
             if (isNumber && portNumber <= 65535)
             {
-                if (_communicationService.Test(_model.PublisherIpAdress, portNumber))
-                    return portNumber;
+                _subscribeConfig.PublisherPortNumber = portNumber;
+
+                if (_communicationService.Subscribe(_subscribeConfig))
+                    return true;
             }
 
-            return null;
+            return false;
         }
 
         #endregion
 
-
-        private void AskForScenario()
+        private void WaitForStop()
         {
-            int? scenario = null;
-            while (scenario == null)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Please enter the scenario number:");
-
-                scenario = ReadScenarioNumber();
-            }
-
-            _model.PublisherPort = scenario.Value;
+            Console.WriteLine("=======================================");
+            Console.WriteLine();
+            Console.WriteLine("Server is listening ...");
+            Console.WriteLine("Press any key to stop the server ...");
+            Console.WriteLine();
+            Console.WriteLine("=======================================");
+            Console.ReadKey();
         }
-
-        private int? ReadScenarioSelection()
-        {
-            var portText = Console.ReadLine();
-            var isNumber = Int32.TryParse(portText, out int portNumber);
-
-            if (isNumber && portNumber <= 65535)
-            {
-                if (_communicationService.Test(_model.PublisherIpAdress, portNumber))
-                    return portNumber;
-            }
-
-            return null;
-        }
-
-
     }
 }

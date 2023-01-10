@@ -112,26 +112,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppType.cs" />
-    <Compile Include="AppConfig.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="IAppConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publisher\Core\PublisherM.cs" />
     <Compile Include="Publisher\Presentation\PublisherVm.cs" />
+    <Compile Include="Subscriber\BL\CommunicationService.cs" />
+    <Compile Include="Subscriber\Contract\ISubscribeConfig.cs" />
     <Compile Include="Subscriber\Contract\ICommunicationService.cs" />
-    <Compile Include="Subscriber\Core\Enums\Scenario.cs" />
-    <Compile Include="Subscriber\Core\SubscriberM.cs" />
+    <Compile Include="Publisher\Core\Enums\Scenario.cs" />
+    <Compile Include="Subscriber\Core\SubscribeConfig.cs" />
     <Compile Include="Subscriber\Presentation\SubscriberVm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <Protobuf Include="Publisher\BL\Protos\Publisher.proto">
+      <Generator>MSBuild:Compile</Generator>
+    </Protobuf>
+    <Protobuf Include="Subscriber\BL\Protos\Subscriber.proto">
+      <Generator>MSBuild:Compile</Generator>
+    </Protobuf>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Publisher\BL\" />
+    <Folder Include="Publisher\BL\Services\" />
     <Folder Include="Publisher\Contract\" />
-    <Folder Include="Subscriber\BL\" />
+    <Folder Include="Subscriber\BL\Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.2.46.5\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.2.46.5\build\net45\Grpc.Core.targets')" />

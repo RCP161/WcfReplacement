@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/Timestamp.proto";
+
+option csharp_namespace = "Prototype.Subscriber.BL";
+
+service SubscriberGrpcService{
+    rpc PresentStandard(google.protobuf.Empty) returns (ResponseMessage);
+    rpc RequestPerformance(google.protobuf.Empty) returns (ResponseMessage);
+    rpc StreamPerformance(google.protobuf.Empty) returns (ResponseMessage);
+    rpc SerialisationXmlPerformance(google.protobuf.Empty) returns (ResponseMessage);
+    rpc SerialisationBinaryPerformance(google.protobuf.Empty) returns (ResponseMessage);
+    rpc SerialisationProtoPerformance(google.protobuf.Empty) returns (ResponseMessage);
+}
+
+message EmployeeModel{
+    google.protobuf.Timestamp dateTimeStamp = 1;
+    string name=2;
+    string skill=3;
+    string email=4;
+}
+
+message ResponseMessage{
+    string message=1;
+    bool success=2;
+    repeated EmployeeModel employees=3;
+}

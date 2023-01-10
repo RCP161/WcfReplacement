@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "Prototype.Publisher.BL";
+
+service PublisherGrpcService{
+    rpc Register(SubscriberModel) returns (ResponseMessage);
+}
+
+message SubscriberModel{
+    string name=1;
+    string ipAddress=2;
+    int32 portNumber=3;
+}
+
+message ResponseMessage{
+    string message=1;
+    bool success=2;
+}

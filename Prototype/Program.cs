@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Catel.IoC;
 using Prototype.Publisher.Presentation;
+using Prototype.Subscriber.Presentation;
 
 namespace Prototype
 {
@@ -26,11 +27,13 @@ namespace Prototype
             switch (_appType)
             {
                 case AppType.Publisher:
-                    PublisherVm vm = new PublisherVm();
-                    vm.Start();
+                    PublisherVm p = new PublisherVm(_portNumber.Value);
+                    p.Start();
                     break;
                 case AppType.Subscriber:
-                    throw new NotImplementedException();
+                    SubscriberVm s = new SubscriberVm(_portNumber.Value);
+                    s.Start();
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -111,7 +114,6 @@ namespace Prototype
 
         private static void RegisterServices()
         {
-            ServiceLocator.Default.RegisterInstance<IAppConfig>(new AppConfig(_appType.Value, _portNumber.Value));
         }
 
         #endregion
