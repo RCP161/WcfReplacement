@@ -10,5 +10,7 @@ namespace Prototype.Publisher.Contract
     {
         void StartServiceHost(IServerConfig localServerConfig);
         Task StopServiceHostAsync();
+
+        event Events.SubscriberEventHandler SubscriberEvent;
     }
 }

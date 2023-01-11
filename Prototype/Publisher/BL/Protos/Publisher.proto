@@ -4,7 +4,7 @@ option csharp_namespace = "Prototype.Publisher.BL";
 
 service PublisherGrpcService{
     rpc Subscribe(SubscriberModel) returns (ResponseMessage);
-    rpc UnSubscribe(SubscriberModel) returns (ResponseMessage);
+    rpc Unsubscribe(SubscriberModel) returns (ResponseMessage);
 }
 
 message SubscriberModel{

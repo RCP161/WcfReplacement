@@ -63,5 +63,10 @@ namespace Prototype.Subscriber.BL
         {
             throw new NotImplementedException();
         }
+
+        public override Task<Empty> Unsubscribed(Empty request, ServerCallContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

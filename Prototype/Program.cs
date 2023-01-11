@@ -49,6 +49,7 @@ namespace Prototype
 
         private static void Welcome()
         {
+            Console.WriteLine("========================================");
             Console.WriteLine("Welcome to the WCF replacement prototype");
             Console.WriteLine("========================================");
         }

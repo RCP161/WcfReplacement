@@ -1,12 +1,7 @@
 ﻿using Catel.IoC;
 using Prototype.Publisher.Contract;
-using Prototype.Publisher.Core;
 using Prototype.Publisher.Core.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prototype.Publisher.Presentation
 {
@@ -27,10 +22,25 @@ namespace Prototype.Publisher.Presentation
             AskForScenario();
         }
 
+        #region Server
+
         private void StartServer()
         {
             _communicationService.StartServiceHost(_localServerConfig);
+            _communicationService.SubscriberEvent += CommunicationService_SubscriberEvent;
         }
+
+        private void CommunicationService_SubscriberEvent(object sender, Contract.Events.SubscriberEventArgs e)
+        {
+            if (e.Subscribed)
+                Console.WriteLine($"-- {e.ServerConfig} subscribed");
+            else
+                Console.WriteLine($"-- {e.ServerConfig} unsubscribed");
+        }
+
+        #endregion
+
+        #region Scenario
 
         private void AskForScenario()
         {
@@ -60,5 +70,8 @@ namespace Prototype.Publisher.Presentation
 
             return scenario;
         }
+
+        #endregion
+
     }
 }

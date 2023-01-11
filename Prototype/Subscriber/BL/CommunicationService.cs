@@ -63,7 +63,7 @@ namespace Prototype.Subscriber.BL
 
             try
             {
-                return client.UnSubscribe(subscriberModel).Success;
+                return client.Unsubscribe(subscriberModel).Success;
             }
             catch
             {

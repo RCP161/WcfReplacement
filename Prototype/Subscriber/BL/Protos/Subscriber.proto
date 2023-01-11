@@ -12,6 +12,7 @@ service SubscriberGrpcService{
     rpc SerialisationXmlPerformance(google.protobuf.Empty) returns (ResponseMessage);
     rpc SerialisationBinaryPerformance(google.protobuf.Empty) returns (ResponseMessage);
     rpc SerialisationProtoPerformance(google.protobuf.Empty) returns (ResponseMessage);
+    rpc Unsubscribed(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 message EmployeeModel{

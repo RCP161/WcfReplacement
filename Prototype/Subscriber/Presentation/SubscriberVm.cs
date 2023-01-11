@@ -66,6 +66,8 @@ namespace Prototype.Subscriber.Presentation
 
         private void WaitForStop()
         {
+            Console.WriteLine();
+            Console.WriteLine();
             Console.WriteLine("=======================================");
             Console.WriteLine();
             Console.WriteLine("Server is listening ...");
