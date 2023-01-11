@@ -1,37 +1,75 @@
 ﻿using Grpc.Core;
+using Prototype.Publisher.BL;
 using Prototype.Subscriber.Contract;
-using Prototype.Subscriber.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Prototype.Subscriber.BL
 {
     internal class CommunicationService : ICommunicationService
     {
+        private IServerConfig _localServerConfig;
         private Server _server;
 
-        public void StartHostServer(SubscribeConfig subscribeConfig)
+        public void StartServiceHost(IServerConfig localServerConfig)
         {
+            _localServerConfig = localServerConfig;
+
             _server = new Server()
             {
                 Services = { SubscriberGrpcService.BindService(new SubscriberService()) },
-                Ports = { new ServerPort(subscribeConfig.IpAdress, subscribeConfig.PortNumber, ServerCredentials.Insecure) }
+                Ports = { new ServerPort(localServerConfig.IpAdress, localServerConfig.PortNumber, ServerCredentials.Insecure) }
             };
 
             _server.Start();
         }
 
-        public async Task ShutDownAsync()
+        public async Task StopServiceHostAsync()
         {
             await _server.ShutdownAsync();
         }
 
-        public bool Subscribe(ISubscribeConfig subscribeConfig)
+        public bool Subscribe(IServerConfig publisherServerConfig)
         {
-            throw new NotImplementedException();
+            var channel = new Channel(publisherServerConfig.IpAdress, publisherServerConfig.PortNumber, ChannelCredentials.Insecure);
+            var client = new PublisherGrpcService.PublisherGrpcServiceClient(channel);
+
+            var subscriberModel = new SubscriberModel()
+            {
+                IpAddress = _localServerConfig.IpAdress,
+                PortNumber = _localServerConfig.PortNumber
+            };
+
+            try
+            {
+                return client.Subscribe(subscriberModel).Success;
+            }
+            catch
+            {
+                // Log
+                return false;
+            }
+        }
+
+        public bool Unsubscribe(IServerConfig publisherServerConfig)
+        {
+            var channel = new Channel(publisherServerConfig.IpAdress, publisherServerConfig.PortNumber, ChannelCredentials.Insecure);
+            var client = new PublisherGrpcService.PublisherGrpcServiceClient(channel);
+
+            var subscriberModel = new SubscriberModel()
+            {
+                IpAddress = _localServerConfig.IpAdress,
+                PortNumber = _localServerConfig.PortNumber
+            };
+
+            try
+            {
+                return client.UnSubscribe(subscriberModel).Success;
+            }
+            catch
+            {
+                // Log
+                return false;
+            }
         }
     }
 }

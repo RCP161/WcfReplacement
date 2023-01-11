@@ -1,22 +1,17 @@
 ﻿using Catel.IoC;
 using Prototype.Subscriber.Contract;
-using Prototype.Subscriber.Core;
 using System;
 
 namespace Prototype.Subscriber.Presentation
 {
     internal class SubscriberVm
     {
-        private readonly SubscribeConfig _subscribeConfig;
         private readonly ICommunicationService _communicationService;
+        private readonly IServerConfig _localServerConfig;
 
-        public SubscriberVm(int portNumber)
+        public SubscriberVm(IServerConfig serverConfig)
         {
-            _subscribeConfig = new SubscribeConfig()
-            {
-                PortNumber = portNumber
-            };
-
+            _localServerConfig = serverConfig;
             _communicationService = ServiceLocator.Default.ResolveType<ICommunicationService>();
         }
 
@@ -29,7 +24,7 @@ namespace Prototype.Subscriber.Presentation
 
         private void StartServer()
         {
-            _communicationService.StartHostServer(_subscribeConfig);
+            _communicationService.StartServiceHost(_localServerConfig);
         }
 
         #region Subscribe
@@ -54,9 +49,13 @@ namespace Prototype.Subscriber.Presentation
 
             if (isNumber && portNumber <= 65535)
             {
-                _subscribeConfig.PublisherPortNumber = portNumber;
+                var publisherConfig = new ServerConfig()
+                {
+                    IpAdress = Constants.LocalHost,
+                    PortNumber = portNumber
+                };
 
-                if (_communicationService.Subscribe(_subscribeConfig))
+                if (_communicationService.Subscribe(publisherConfig))
                     return true;
             }
 

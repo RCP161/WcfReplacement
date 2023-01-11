@@ -1,4 +1,6 @@
-﻿using Prototype.Publisher.Core;
+﻿using Catel.IoC;
+using Prototype.Publisher.Contract;
+using Prototype.Publisher.Core;
 using Prototype.Publisher.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,21 +12,24 @@ namespace Prototype.Publisher.Presentation
 {
     internal class PublisherVm
     {
-        private readonly PublisherM _model;
+        private readonly ServerConfig _localServerConfig;
+        private readonly ICommunicationService _communicationService;
 
-        public PublisherVm(int portNumber)
+        public PublisherVm(ServerConfig config)
         {
-        }
-
-        internal PublisherVm()
-        {
-            _model = new PublisherM();
+            _localServerConfig = config;
+            _communicationService = ServiceLocator.Default.ResolveType<ICommunicationService>();
         }
 
         internal void Start()
         {
-            // Bl staren und Event Registrieren?
-            throw new NotImplementedException();
+            StartServer();
+            AskForScenario();
+        }
+
+        private void StartServer()
+        {
+            _communicationService.StartServiceHost(_localServerConfig);
         }
 
         private void AskForScenario()
@@ -35,10 +40,14 @@ namespace Prototype.Publisher.Presentation
                 Console.WriteLine();
                 Console.WriteLine("Please enter the scenario number:");
 
+                foreach (var sc in Enum.GetValues(typeof(Scenario)))
+                {
+                    Console.WriteLine($"{(int)sc} - {sc}");
+                }
+                Console.WriteLine();
+
                 scenario = ReadScenarioNumber();
             }
-
-            //_model.PublisherPort = scenario.Value;
         }
 
         private Scenario? ReadScenarioNumber()

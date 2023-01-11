@@ -24,14 +24,20 @@ namespace Prototype
             AskPortNumber();
             RegisterServices();
 
+            var config = new ServerConfig()
+            {
+                IpAdress = Constants.LocalHost,
+                PortNumber = _portNumber.Value
+            };
+
             switch (_appType)
             {
                 case AppType.Publisher:
-                    PublisherVm p = new PublisherVm(_portNumber.Value);
+                    PublisherVm p = new PublisherVm(config);
                     p.Start();
                     break;
                 case AppType.Subscriber:
-                    SubscriberVm s = new SubscriberVm(_portNumber.Value);
+                    SubscriberVm s = new SubscriberVm(config);
                     s.Start();
                     break;
                 default:
@@ -55,6 +61,7 @@ namespace Prototype
                 Console.WriteLine("Please select type:");
                 Console.WriteLine("1 - TBM");
                 Console.WriteLine("2 - Office");
+                Console.WriteLine();
 
                 ReadAppType();
             }
@@ -75,6 +82,7 @@ namespace Prototype
             {
                 Console.WriteLine();
                 Console.WriteLine("Please enter the port:");
+                Console.WriteLine();
 
                 ReadPortNumber();
             }
@@ -114,6 +122,27 @@ namespace Prototype
 
         private static void RegisterServices()
         {
+            switch (_appType)
+            {
+                case AppType.Publisher:
+                    RegisterPublisherServices();
+                    break;
+                case AppType.Subscriber:
+                    RegisterSubscriberServices();
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private static void RegisterPublisherServices()
+        {
+            ServiceLocator.Default.RegisterType<Publisher.Contract.ICommunicationService, Publisher.BL.CommunicationService>();
+        }
+
+        private static void RegisterSubscriberServices()
+        {
+            ServiceLocator.Default.RegisterType<Subscriber.Contract.ICommunicationService, Subscriber.BL.CommunicationService>();
         }
 
         #endregion

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Prototype.Subscriber.Contract
+namespace Prototype
 {
-    internal interface ISubscribeConfig
+    internal interface IServerConfig
     {
         string IpAdress { get; }
         int PortNumber { get; }
-        string PublisherIpAdress { get; }
-        int PublisherPortNumber { get; }
     }
 }

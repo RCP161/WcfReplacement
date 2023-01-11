@@ -3,7 +3,8 @@ syntax = "proto3";
 option csharp_namespace = "Prototype.Publisher.BL";
 
 service PublisherGrpcService{
-    rpc Register(SubscriberModel) returns (ResponseMessage);
+    rpc Subscribe(SubscriberModel) returns (ResponseMessage);
+    rpc UnSubscribe(SubscriberModel) returns (ResponseMessage);
 }
 
 message SubscriberModel{
