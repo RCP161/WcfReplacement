@@ -8,6 +8,7 @@ namespace Prototype.Subscriber.Presentation
     {
         private readonly ICommunicationService _communicationService;
         private readonly IServerConfig _localServerConfig;
+        private IServerConfig _publisherServerConfig;
 
         public SubscriberVm(IServerConfig serverConfig)
         {
@@ -49,13 +50,13 @@ namespace Prototype.Subscriber.Presentation
 
             if (isNumber && portNumber <= 65535)
             {
-                var publisherConfig = new ServerConfig()
+                _publisherServerConfig = new ServerConfig()
                 {
                     IpAdress = Constants.LocalHost,
                     PortNumber = portNumber
                 };
 
-                if (_communicationService.Subscribe(publisherConfig))
+                if (_communicationService.Subscribe(_publisherServerConfig))
                     return true;
             }
 
@@ -75,6 +76,9 @@ namespace Prototype.Subscriber.Presentation
             Console.WriteLine();
             Console.WriteLine("=======================================");
             Console.ReadKey();
+
+            _communicationService.Unsubscribe(_publisherServerConfig);
+            _communicationService.StopServiceHostAsync().GetAwaiter().GetResult();
         }
     }
 }

@@ -116,10 +116,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publisher\BL\CommunicationService.cs" />
+    <Compile Include="Publisher\BL\DataGeneration.cs" />
     <Compile Include="Publisher\BL\PublisherService.cs" />
+    <Compile Include="Publisher\BL\ScenarioService.cs" />
     <Compile Include="Publisher\Contract\Events\SubscriberEventArgs.cs" />
     <Compile Include="Publisher\Contract\Events\SubscriberEventHandler.cs" />
     <Compile Include="Publisher\Contract\ICommunicationService.cs" />
+    <Compile Include="Publisher\Contract\IScenarioService.cs" />
     <Compile Include="Publisher\Presentation\PublisherVm.cs" />
     <Compile Include="Subscriber\BL\CommunicationService.cs" />
     <Compile Include="Subscriber\BL\SubscriberService.cs" />

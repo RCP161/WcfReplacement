@@ -4,16 +4,14 @@ using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.BL;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Prototype.Publisher.BL
 {
-    internal class CommunicationService : ICommunicationService
+    internal class CommunicationService : ICommunicationService, IDisposable
     {
         private Server _server;
+        private PublisherService _publisherService;
         private readonly Dictionary<ServerConfig, Channel> _subscribers;
 
         public CommunicationService()
@@ -23,12 +21,12 @@ namespace Prototype.Publisher.BL
 
         public void StartServiceHost(IServerConfig localServerConfig)
         {
-            var publisherService = new PublisherService(_subscribers, localServerConfig);
-            publisherService.SubscriberEvent += PublisherService_SubscriberEvent;
+            _publisherService = new PublisherService(_subscribers, localServerConfig);
+            _publisherService.SubscriberEvent += PublisherService_SubscriberEvent;
 
             _server = new Server()
             {
-                Services = { PublisherGrpcService.BindService(publisherService) },
+                Services = { PublisherGrpcService.BindService(_publisherService) },
                 Ports = { new ServerPort(localServerConfig.IpAdress, localServerConfig.PortNumber, ServerCredentials.Insecure) }
             };
 
@@ -49,7 +47,6 @@ namespace Prototype.Publisher.BL
                 {
                     // Log
                 }
-
             }
 
             await _server.ShutdownAsync();
@@ -61,6 +58,12 @@ namespace Prototype.Publisher.BL
         private void PublisherService_SubscriberEvent(object sender, Contract.Events.SubscriberEventArgs e)
         {
             SubscriberEvent?.Invoke(sender, e);
+        }
+
+        public void Dispose()
+        {
+            if (_publisherService != null)
+                _publisherService.SubscriberEvent -= PublisherService_SubscriberEvent;
         }
     }
 }

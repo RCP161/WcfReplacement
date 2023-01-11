@@ -1,4 +1,5 @@
-﻿using Catel.IoC;
+﻿using Catel;
+using Catel.IoC;
 using Prototype.Publisher.Contract;
 using Prototype.Publisher.Core.Enums;
 using System;
@@ -9,11 +10,13 @@ namespace Prototype.Publisher.Presentation
     {
         private readonly ServerConfig _localServerConfig;
         private readonly ICommunicationService _communicationService;
+        private readonly IScenarioService _scenarioService;
 
         public PublisherVm(ServerConfig config)
         {
             _localServerConfig = config;
             _communicationService = ServiceLocator.Default.ResolveType<ICommunicationService>();
+            _scenarioService = ServiceLocator.Default.ResolveType<IScenarioService>();
         }
 
         internal void Start()
@@ -45,19 +48,28 @@ namespace Prototype.Publisher.Presentation
         private void AskForScenario()
         {
             Scenario? scenario = null;
-            while (scenario == null)
+            while (scenario != Scenario.Stop)
             {
-                Console.WriteLine();
-                Console.WriteLine("Please enter the scenario number:");
-
-                foreach (var sc in Enum.GetValues(typeof(Scenario)))
-                {
-                    Console.WriteLine($"{(int)sc} - {sc}");
-                }
-                Console.WriteLine();
-
+                WriteScenarioOptions();
                 scenario = ReadScenarioNumber();
+
+                if (scenario == null)
+                    continue;
+
+                ExecuteScenario(scenario.Value);
             }
+        }
+
+        private void WriteScenarioOptions()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Please enter the scenario number:");
+
+            foreach (var sc in Enum.GetValues(typeof(Scenario)))
+            {
+                Console.WriteLine($"{(int)sc} - {sc}");
+            }
+            Console.WriteLine();
         }
 
         private Scenario? ReadScenarioNumber()
@@ -69,6 +81,27 @@ namespace Prototype.Publisher.Presentation
                 return null;
 
             return scenario;
+        }
+
+        private void ExecuteScenario(Scenario value)
+        {
+            switch (value)
+            {
+                case Scenario.Stop:
+                    _communicationService.StopServiceHostAsync().GetAwaiter().GetResult();
+                    break;
+                case Scenario.PresentStandard:
+                    _scenarioService.EvaluatePresentStandard();
+                    break;
+                case Scenario.RequestVsStreamPerformance:
+                    _scenarioService.EvaluateRequestVsStreamPerformance();
+                    break;
+                case Scenario.SerialisationPerformance:
+                    _scenarioService.EvaluateSerialisationPerformance();
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         #endregion
