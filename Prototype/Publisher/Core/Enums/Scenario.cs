@@ -19,7 +19,7 @@ namespace Prototype.Publisher.Core.Enums
         /// <summary>
         /// 0.5s, 5mb
         /// </summary>
-        RequestVsStreamPerformance,
+        RequestPerformance,
         /// <summary>
         /// Xml/Byte/Proto, 1s, 5mb
         /// </summary>

@@ -1,29 +1,40 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "google/protobuf/Timestamp.proto";
 
 option csharp_namespace = "Prototype.Subscriber.BL";
 
 service SubscriberGrpcService{
-    rpc PresentStandard(google.protobuf.Empty) returns (ResponseMessage);
-    rpc RequestPerformance(google.protobuf.Empty) returns (ResponseMessage);
-    rpc StreamPerformance(google.protobuf.Empty) returns (ResponseMessage);
-    rpc SerialisationXmlPerformance(google.protobuf.Empty) returns (ResponseMessage);
-    rpc SerialisationBinaryPerformance(google.protobuf.Empty) returns (ResponseMessage);
-    rpc SerialisationProtoPerformance(google.protobuf.Empty) returns (ResponseMessage);
-    rpc Unsubscribed(google.protobuf.Empty) returns (google.protobuf.Empty);
+    rpc PresentStandard(TestByteArray) returns (ResponseMessage);
+    rpc RequestPerformance(TestByteArray) returns (ResponseMessage);
+    rpc SerialisationBinaryPerformance(SerialisationBinaryModel) returns (ResponseMessage);
+    rpc SerialisationProtoPerformance(SerialisationProtoModel) returns (ResponseMessage);
+    rpc Unsubscribed(google.protobuf.Empty) returns (ResponseMessage);
 }
 
-message EmployeeModel{
-    google.protobuf.Timestamp dateTimeStamp = 1;
+message TestByteArray{
+    bytes data=1;
+    int32 dataSize=2;
+}
+
+message SerialisationBinaryModel{
+    bytes data=1;
+    int32 dataSize=2;
+    int32 deep=3;
+}
+
+message SerialisationProtoModel{
+    reserved 1;
+
     string name=2;
-    string skill=3;
-    string email=4;
+    int32 number=3;
+    int32 dataSize=4;
+    int32 deep=5;
+    bytes data=6;
+    repeated SerialisationProtoModel serialsiationTestObjs=7;
 }
 
 message ResponseMessage{
     string message=1;
     bool success=2;
-    repeated EmployeeModel employees=3;
 }

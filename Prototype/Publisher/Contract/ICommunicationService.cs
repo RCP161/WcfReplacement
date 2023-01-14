@@ -11,6 +11,10 @@ namespace Prototype.Publisher.Contract
         void StartServiceHost(IServerConfig localServerConfig);
         Task StopServiceHostAsync();
 
+
+        bool SendPresentStandad();
+
+
         event Events.SubscriberEventHandler SubscriberEvent;
     }
 }

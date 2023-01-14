@@ -4,6 +4,7 @@ using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.BL;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Prototype.Publisher.BL
@@ -35,7 +36,7 @@ namespace Prototype.Publisher.BL
 
         public async Task StopServiceHostAsync()
         {
-            foreach (var s in _subscribers)
+            foreach(var s in _subscribers)
             {
                 var client = new SubscriberGrpcService.SubscriberGrpcServiceClient(s.Value);
 
@@ -62,8 +63,26 @@ namespace Prototype.Publisher.BL
 
         public void Dispose()
         {
-            if (_publisherService != null)
+            if(_publisherService != null)
                 _publisherService.SubscriberEvent -= PublisherService_SubscriberEvent;
+        }
+
+        public bool SendPresentStandad()
+        {
+            throw new NotImplementedException();
+            foreach(var s in _subscribers)
+            {
+                var client = new SubscriberGrpcService.SubscriberGrpcServiceClient(s.Value);
+
+                try
+                {
+                    client.PresentStandard(new Google.Protobuf.WellKnownTypes.Empty());
+                }
+                catch
+                {
+                    // Log
+                }
+            }
         }
     }
 }

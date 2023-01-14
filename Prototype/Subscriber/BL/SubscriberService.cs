@@ -1,72 +1,121 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Prototype.Testing.Contract;
+using Prototype.Testing.Core;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Prototype.Subscriber.BL
 {
     internal class SubscriberService : SubscriberGrpcService.SubscriberGrpcServiceBase
     {
-        public override Task<ResponseMessage> PresentStandard(Empty request, ServerCallContext context)
+        private readonly ITestDataService _testDataService;
+
+        public SubscriberService(ITestDataService testDataService)
         {
-            throw new NotImplementedException();
-            var employees = new Google.Protobuf.Collections.RepeatedField<EmployeeModel>();
+            _testDataService = testDataService;
+        }
 
-            for (int i = 0; i < 5; i++)
-            {
+        public override Task<ResponseMessage> PresentStandard(TestByteArray request, ServerCallContext context)
+        {
+            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
 
-                employees.Add(
-                    new EmployeeModel
-                    {
-                        DateTimeStamp = new Timestamp(),
-                        Name = $"user{i}",
-                        Email = $"user{i}@test.de",
-                        Skill = $"{i} skills"
-                    });
-            }
+            if(!success)
+                return GetFinishResponse(success);
 
+            success = _testDataService.IsTestArrayCorrect(data);
+            return GetFinishResponse(success);
+        }
 
+        public override Task<ResponseMessage> RequestPerformance(TestByteArray request, ServerCallContext context)
+        {
+            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
+
+            if(!success)
+                return GetFinishResponse(success);
+
+            success = _testDataService.IsTestArrayCorrect(data);
+            return GetFinishResponse(success);
+        }
+
+        public override Task<ResponseMessage> SerialisationBinaryPerformance(SerialisationBinaryModel request, ServerCallContext context)
+        {
+            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
+
+            if(!success)
+                return GetFinishResponse(success);
+
+            success = _testDataService.IsCreateSerialisationTestObjCorrect(data, request.Deep, request.DataSize);
+            return GetFinishResponse(success);
+        }
+
+        public override Task<ResponseMessage> SerialisationProtoPerformance(SerialisationProtoModel request, ServerCallContext context)
+        {
+            var serialisationTestObj = GetSerialisationTestObj(request);
+            bool success = _testDataService.IsCreateSerialisationTestObjCorrect(serialisationTestObj, request.Deep, request.DataSize);
+            return GetFinishResponse(success);
+        }
+
+        public override Task<ResponseMessage> Unsubscribed(Empty request, ServerCallContext context)
+        {
+            // Handle if necessary
+            return GetFinishResponse(true);
+        }
+
+        private Task<ResponseMessage> GetFinishResponse(bool success)
+        {
             var message = new ResponseMessage()
             {
                 Message = "finished",
-                Success = employees.Count > 0
+                Success = success
             };
-
-            message.Employees.Add(employees);
 
             return Task.FromResult(message);
         }
 
-        public override Task<ResponseMessage> RequestPerformance(Empty request, ServerCallContext context)
+        private bool TryGetData(ByteString bytes, int size, out byte[] data)
         {
-            throw new NotImplementedException();
+            data = new byte[size];
+
+            try
+            {
+                bytes.CopyTo(data, 0);
+
+            }
+            catch(Exception ex)
+            {
+                // log
+                return false;
+            }
+
+            return true;
         }
 
-        public override Task<ResponseMessage> SerialisationBinaryPerformance(Empty request, ServerCallContext context)
+        private SerialisationTestObj GetSerialisationTestObj(SerialisationProtoModel model)
         {
-            throw new NotImplementedException();
-        }
+            if(model.Deep == 0 &&
+                model.Number == 0 &&
+                model.Name.Length == 0 &&
+                model.DataSize == 0 &&
+                model.Data.Length == 0)
+                return null;
 
-        public override Task<ResponseMessage> SerialisationProtoPerformance(Empty request, ServerCallContext context)
-        {
-            throw new NotImplementedException();
-        }
-        public override Task<ResponseMessage> SerialisationXmlPerformance(Empty request, ServerCallContext context)
-        {
-            throw new NotImplementedException();
-        }
+            SerialisationTestObj obj = new SerialisationTestObj()
+            {
+                Name = model.Name,
+                Number = model.Number,
+                DataSize = model.DataSize,
+                SerialisationTestObjs = new List<SerialisationTestObj>()
+            };
 
-        public override Task<ResponseMessage> StreamPerformance(Empty request, ServerCallContext context)
-        {
-            throw new NotImplementedException();
-        }
+            model.Data.CopyTo(obj.Data, 0);
 
-        public override Task<Empty> Unsubscribed(Empty request, ServerCallContext context)
-        {
-            throw new NotImplementedException();
+            foreach(var child in model.SerialsiationTestObjs)
+                obj.SerialisationTestObjs.Add(GetSerialisationTestObj(child));
+
+            return obj;
         }
     }
 }

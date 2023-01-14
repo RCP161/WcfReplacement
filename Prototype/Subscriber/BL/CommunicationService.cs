@@ -1,14 +1,22 @@
 ﻿using Grpc.Core;
 using Prototype.Publisher.BL;
 using Prototype.Subscriber.Contract;
+using Prototype.Testing.Contract;
 using System.Threading.Tasks;
 
 namespace Prototype.Subscriber.BL
 {
     internal class CommunicationService : ICommunicationService
     {
+        private readonly ITestDataService _testDataService;
         private IServerConfig _localServerConfig;
         private Server _server;
+
+        public CommunicationService(ITestDataService testDataService)
+        {
+            _testDataService = testDataService;
+        }
+
 
         public void StartServiceHost(IServerConfig localServerConfig)
         {
@@ -16,7 +24,7 @@ namespace Prototype.Subscriber.BL
 
             _server = new Server()
             {
-                Services = { SubscriberGrpcService.BindService(new SubscriberService()) },
+                Services = { SubscriberGrpcService.BindService(new SubscriberService(_testDataService)) },
                 Ports = { new ServerPort(localServerConfig.IpAdress, localServerConfig.PortNumber, ServerCredentials.Insecure) }
             };
 

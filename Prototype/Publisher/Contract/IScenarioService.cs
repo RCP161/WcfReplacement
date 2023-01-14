@@ -9,7 +9,7 @@ namespace Prototype.Publisher.Contract
     internal interface IScenarioService
     {
         void EvaluatePresentStandard();
-        void EvaluateRequestVsStreamPerformance();
+        void EvaluateRequestPerformance();
         void EvaluateSerialisationPerformance();
     }
 }

@@ -93,8 +93,8 @@ namespace Prototype.Publisher.Presentation
                 case Scenario.PresentStandard:
                     _scenarioService.EvaluatePresentStandard();
                     break;
-                case Scenario.RequestVsStreamPerformance:
-                    _scenarioService.EvaluateRequestVsStreamPerformance();
+                case Scenario.RequestPerformance:
+                    _scenarioService.EvaluateRequestPerformance();
                     break;
                 case Scenario.SerialisationPerformance:
                     _scenarioService.EvaluateSerialisationPerformance();
