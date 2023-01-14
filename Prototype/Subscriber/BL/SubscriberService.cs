@@ -20,42 +20,42 @@ namespace Prototype.Subscriber.BL
 
         public override Task<ResponseMessage> PresentStandard(TestByteArray request, ServerCallContext context)
         {
-            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
+            bool successful = TryGetData(request.Data, request.DataSize, out byte[] data);
 
-            if(!success)
-                return GetFinishResponse(success);
+            if(!successful)
+                return GetFinishResponse(successful);
 
-            success = _testDataService.IsTestArrayCorrect(data);
-            return GetFinishResponse(success);
+            successful = _testDataService.IsTestArrayCorrect(data);
+            return GetFinishResponse(successful);
         }
 
         public override Task<ResponseMessage> RequestPerformance(TestByteArray request, ServerCallContext context)
         {
-            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
+            bool successful = TryGetData(request.Data, request.DataSize, out byte[] data);
 
-            if(!success)
-                return GetFinishResponse(success);
+            if(!successful)
+                return GetFinishResponse(successful);
 
-            success = _testDataService.IsTestArrayCorrect(data);
-            return GetFinishResponse(success);
+            successful = _testDataService.IsTestArrayCorrect(data);
+            return GetFinishResponse(successful);
         }
 
         public override Task<ResponseMessage> SerialisationBinaryPerformance(SerialisationBinaryModel request, ServerCallContext context)
         {
-            bool success = TryGetData(request.Data, request.DataSize, out byte[] data);
+            bool successful = TryGetData(request.Data, request.DataSize, out byte[] data);
 
-            if(!success)
-                return GetFinishResponse(success);
+            if(!successful)
+                return GetFinishResponse(successful);
 
-            success = _testDataService.IsCreateSerialisationTestObjCorrect(data, request.Deep, request.DataSize);
-            return GetFinishResponse(success);
+            successful = _testDataService.IsCreateSerialisationTestObjCorrect(data, request.Deep, request.DataSize);
+            return GetFinishResponse(successful);
         }
 
         public override Task<ResponseMessage> SerialisationProtoPerformance(SerialisationProtoModel request, ServerCallContext context)
         {
             var serialisationTestObj = GetSerialisationTestObj(request);
-            bool success = _testDataService.IsCreateSerialisationTestObjCorrect(serialisationTestObj, request.Deep, request.DataSize);
-            return GetFinishResponse(success);
+            bool successful = _testDataService.IsCreateSerialisationTestObjCorrect(serialisationTestObj, request.Deep, request.DataSize);
+            return GetFinishResponse(successful);
         }
 
         public override Task<ResponseMessage> Unsubscribed(Empty request, ServerCallContext context)
@@ -69,7 +69,7 @@ namespace Prototype.Subscriber.BL
             var message = new ResponseMessage()
             {
                 Message = "finished",
-                Success = success
+                Successful = success
             };
 
             return Task.FromResult(message);

@@ -15,12 +15,12 @@ namespace gRPC.Framework.Client
 
             var result = GetAllEmployee().GetAwaiter().GetResult();
 
-            Console.WriteLine($"Request was successfull: {result.Success}");
+            Console.WriteLine($"Request was successful: {result.Successful}");
             Console.WriteLine($"{result.Employees.Count} employees found");
             Console.WriteLine();
             Console.WriteLine();
 
-            foreach (var emp in result.Employees)
+            foreach(var emp in result.Employees)
             {
                 Console.WriteLine("======================");
                 Console.WriteLine();

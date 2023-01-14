@@ -49,7 +49,7 @@ namespace Prototype.Subscriber.BL
 
             try
             {
-                return client.Subscribe(subscriberModel).Success;
+                return client.Subscribe(subscriberModel).Successful;
             }
             catch
             {
@@ -71,7 +71,7 @@ namespace Prototype.Subscriber.BL
 
             try
             {
-                return client.Unsubscribe(subscriberModel).Success;
+                return client.Unsubscribe(subscriberModel).Successful;
             }
             catch
             {

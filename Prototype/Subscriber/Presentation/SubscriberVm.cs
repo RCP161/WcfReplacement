@@ -34,7 +34,7 @@ namespace Prototype.Subscriber.Presentation
         {
             var subscribed = false;
 
-            while (!subscribed)
+            while(!subscribed)
             {
                 Console.WriteLine();
                 Console.WriteLine("Please enter the port of the publisher port number:");
@@ -48,7 +48,7 @@ namespace Prototype.Subscriber.Presentation
             var portText = Console.ReadLine();
             var isNumber = Int32.TryParse(portText, out int portNumber);
 
-            if (isNumber && portNumber <= 65535)
+            if(isNumber && portNumber <= 65535)
             {
                 _publisherServerConfig = new ServerConfig()
                 {
@@ -56,7 +56,7 @@ namespace Prototype.Subscriber.Presentation
                     PortNumber = portNumber
                 };
 
-                if (_communicationService.Subscribe(_publisherServerConfig))
+                if(_communicationService.Subscribe(_publisherServerConfig))
                     return true;
             }
 

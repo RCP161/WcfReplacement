@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Prototype.Testing.Core;
 using System.Threading.Tasks;
 
 namespace Prototype.Publisher.Contract
@@ -12,8 +9,10 @@ namespace Prototype.Publisher.Contract
         Task StopServiceHostAsync();
 
 
-        bool SendPresentStandad();
-
+        bool SendPresentStandad(byte[] data, int dataSize);
+        bool SendRequestPerformance(byte[] data, int dataSize);
+        bool SendSerialisationBinaryPerformance(byte[] data, int size, int deep);
+        bool SendSerialisationProtoPerformance(SerialisationTestObj serialisationTestObj, int size, int deep);
 
         event Events.SubscriberEventHandler SubscriberEvent;
     }

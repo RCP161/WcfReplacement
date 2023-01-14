@@ -1,11 +1,4 @@
-﻿using Prototype.Subscriber.Contract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Prototype
+﻿namespace Prototype
 {
     internal class ServerConfig : IServerConfig
     {

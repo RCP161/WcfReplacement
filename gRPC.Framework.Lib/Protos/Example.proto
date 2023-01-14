@@ -18,6 +18,6 @@ message ExampleModel{
 
 message ResponseMessage{
     string message=1;
-    bool success=2;
+    bool successful=2;
     repeated ExampleModel examples=3;
 }

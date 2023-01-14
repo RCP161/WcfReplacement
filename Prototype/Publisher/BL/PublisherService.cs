@@ -1,6 +1,5 @@
 ﻿using Grpc.Core;
 using Prototype.Publisher.Contract.Events;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace Prototype.Publisher.BL
 
         public override Task<ResponseMessage> Subscribe(SubscriberModel request, ServerCallContext context)
         {
-            if (!_subscribers.Keys.Any(x => x.IpAdress == request.IpAddress && x.PortNumber == request.PortNumber))
+            if(!_subscribers.Keys.Any(x => x.IpAdress == request.IpAddress && x.PortNumber == request.PortNumber))
             {
                 var serverConfig = new ServerConfig()
                 {
@@ -38,7 +37,7 @@ namespace Prototype.Publisher.BL
             var message = new ResponseMessage()
             {
                 Message = "Subscribed",
-                Success = true,
+                Successful = true,
             };
 
             return Task.FromResult(message);
@@ -48,7 +47,7 @@ namespace Prototype.Publisher.BL
         {
             var subscriber = _subscribers.Keys.SingleOrDefault(x => x.IpAdress == request.IpAddress && x.PortNumber == request.PortNumber);
 
-            if (subscriber != null)
+            if(subscriber != null)
             {
                 _subscribers.Remove(subscriber);
                 RaiseSubscriberEvent(subscriber, false);
@@ -57,7 +56,7 @@ namespace Prototype.Publisher.BL
             var message = new ResponseMessage()
             {
                 Message = "Unsubscribed",
-                Success = true,
+                Successful = true,
             };
 
             return Task.FromResult(message);

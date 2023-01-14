@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
-using Catel.IoC;
+﻿using Catel.IoC;
 using Prototype.Publisher.Presentation;
 using Prototype.Subscriber.Presentation;
+using System;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Prototype
 {
@@ -30,7 +25,7 @@ namespace Prototype
                 PortNumber = _portNumber.Value
             };
 
-            switch (_appType)
+            switch(_appType)
             {
                 case AppType.Publisher:
                     PublisherVm p = new PublisherVm(config);
@@ -56,7 +51,7 @@ namespace Prototype
 
         private static void AskAppType()
         {
-            while (_appType == null)
+            while(_appType == null)
             {
                 Console.WriteLine();
                 Console.WriteLine("Please select type:");
@@ -73,13 +68,13 @@ namespace Prototype
             var input = Console.ReadLine();
             var isValid = Enum.TryParse<AppType>(input, out AppType appType);
 
-            if (isValid)
+            if(isValid)
                 _appType = appType;
         }
 
         private static void AskPortNumber()
         {
-            while (_portNumber == null)
+            while(_portNumber == null)
             {
                 Console.WriteLine();
                 Console.WriteLine("Please enter the port:");
@@ -94,9 +89,9 @@ namespace Prototype
             var portText = Console.ReadLine();
             var isNumber = Int32.TryParse(portText, out int portNumber);
 
-            if (isNumber && portNumber <= 65535)
+            if(isNumber && portNumber <= 65535)
             {
-                if (CheckPortIsFree(portNumber))
+                if(CheckPortIsFree(portNumber))
                     _portNumber = portNumber;
             }
         }
@@ -109,7 +104,7 @@ namespace Prototype
                 TcpListener tcpListener = new TcpListener(ipAddress, portNumber);
                 tcpListener.Start();
             }
-            catch (SocketException ex)
+            catch(SocketException ex)
             {
                 return false;
             }
@@ -123,7 +118,10 @@ namespace Prototype
 
         private static void RegisterServices()
         {
-            switch (_appType)
+            // Logger?
+            ServiceLocator.Default.RegisterType<Testing.Contract.ITestDataService, Testing.BL.TestDataService>();
+
+            switch(_appType)
             {
                 case AppType.Publisher:
                     RegisterPublisherServices();
@@ -139,6 +137,7 @@ namespace Prototype
         private static void RegisterPublisherServices()
         {
             ServiceLocator.Default.RegisterType<Publisher.Contract.ICommunicationService, Publisher.BL.CommunicationService>();
+            ServiceLocator.Default.RegisterType<Publisher.Contract.IScenarioService, Publisher.BL.ScenarioService>();
         }
 
         private static void RegisterSubscriberServices()

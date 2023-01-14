@@ -11,7 +11,7 @@ namespace gRPC.Framework.Server
         {
             var employees = new Google.Protobuf.Collections.RepeatedField<EmployeeModel>();
 
-            for (int i = 0; i < 5; i++)
+            for(int i = 0; i < 5; i++)
             {
 
                 employees.Add(
@@ -28,7 +28,7 @@ namespace gRPC.Framework.Server
             var message = new ResponseMessage()
             {
                 Message = "finished",
-                Success = employees.Count > 0
+                Successful = employees.Count > 0
             };
 
             message.Employees.Add(employees);

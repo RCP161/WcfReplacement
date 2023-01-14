@@ -1,5 +1,4 @@
-﻿using Catel;
-using Catel.IoC;
+﻿using Catel.IoC;
 using Prototype.Publisher.Contract;
 using Prototype.Publisher.Core.Enums;
 using System;
@@ -12,11 +11,15 @@ namespace Prototype.Publisher.Presentation
         private readonly ICommunicationService _communicationService;
         private readonly IScenarioService _scenarioService;
 
+        private const string InfoPrefix = "|| =>";
+
         public PublisherVm(ServerConfig config)
         {
             _localServerConfig = config;
             _communicationService = ServiceLocator.Default.ResolveType<ICommunicationService>();
             _scenarioService = ServiceLocator.Default.ResolveType<IScenarioService>();
+
+            _scenarioService.ScenarioFinishedEvent += ScenarioService_ScenarioFinishedEvent;
         }
 
         internal void Start()
@@ -35,10 +38,11 @@ namespace Prototype.Publisher.Presentation
 
         private void CommunicationService_SubscriberEvent(object sender, Contract.Events.SubscriberEventArgs e)
         {
-            if (e.Subscribed)
-                Console.WriteLine($"-- {e.ServerConfig} subscribed");
-            else
-                Console.WriteLine($"-- {e.ServerConfig} unsubscribed");
+            string action = "subscribed";
+            if(!e.Subscribed)
+                action = "unsubscribed";
+
+            Console.WriteLine($"{InfoPrefix}{e.ServerConfig} {action}");
         }
 
         #endregion
@@ -48,12 +52,12 @@ namespace Prototype.Publisher.Presentation
         private void AskForScenario()
         {
             Scenario? scenario = null;
-            while (scenario != Scenario.Stop)
+            while(scenario != Scenario.Stop)
             {
                 WriteScenarioOptions();
                 scenario = ReadScenarioNumber();
 
-                if (scenario == null)
+                if(scenario == null)
                     continue;
 
                 ExecuteScenario(scenario.Value);
@@ -65,7 +69,7 @@ namespace Prototype.Publisher.Presentation
             Console.WriteLine();
             Console.WriteLine("Please enter the scenario number:");
 
-            foreach (var sc in Enum.GetValues(typeof(Scenario)))
+            foreach(var sc in Enum.GetValues(typeof(Scenario)))
             {
                 Console.WriteLine($"{(int)sc} - {sc}");
             }
@@ -77,7 +81,7 @@ namespace Prototype.Publisher.Presentation
             var portText = Console.ReadLine();
             var isScenario = Enum.TryParse<Scenario>(portText, out Scenario scenario);
 
-            if (!isScenario)
+            if(!isScenario)
                 return null;
 
             return scenario;
@@ -85,7 +89,7 @@ namespace Prototype.Publisher.Presentation
 
         private void ExecuteScenario(Scenario value)
         {
-            switch (value)
+            switch(value)
             {
                 case Scenario.Stop:
                     _communicationService.StopServiceHostAsync().GetAwaiter().GetResult();
@@ -102,6 +106,15 @@ namespace Prototype.Publisher.Presentation
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        private void ScenarioService_ScenarioFinishedEvent(object sender, Contract.Events.ScenarioFinishedEventArgs e)
+        {
+            string successful = "successfully";
+            if(!e.Successful)
+                successful = "not successful";
+
+            Console.WriteLine($"{InfoPrefix}Scenario {e.Text} finished {successful}. Average execution time: {e.AverageExecutionTime} sec.");
         }
 
         #endregion

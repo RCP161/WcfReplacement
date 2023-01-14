@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Prototype.Publisher.Core.Enums
+﻿namespace Prototype.Publisher.Core.Enums
 {
     internal enum Scenario
     {

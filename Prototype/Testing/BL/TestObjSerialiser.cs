@@ -1,13 +1,5 @@
-﻿using Catel.Runtime.Serialization.Xml;
-using Prototype.Testing.Core;
-using System;
-using System.Collections.Generic;
+﻿using Prototype.Testing.Core;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 
 namespace Prototype.Testing.BL
 {
