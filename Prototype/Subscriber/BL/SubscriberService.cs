@@ -2,7 +2,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Prototype.Logging.Contract;
-using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.Contract.Events;
 using Prototype.Testing.Contract;
 using Prototype.Testing.Core;
@@ -53,12 +52,12 @@ namespace Prototype.Subscriber.BL
         {
             RaiseSubscriberEvent("SerialisationPerformance - Binary");
 
-            bool successful = TryGetData(request.Data, request.DataSize, out byte[] data);
+            bool successful = TryGetData(request.Data, request.ObjectSize, out byte[] obj);
 
             if(!successful)
                 return GetFinishResponse(successful);
 
-            successful = _testDataService.IsCreateSerialisationTestObjCorrect(data, request.Deep, request.DataSize);
+            successful = _testDataService.IsCreateSerialisationTestObjCorrect(obj, request.Deep, request.DataSize);
             return GetFinishResponse(successful);
         }
 
@@ -121,6 +120,7 @@ namespace Prototype.Subscriber.BL
                 Name = model.Name,
                 Number = model.Number,
                 DataSize = model.DataSize,
+                Data = new byte[model.DataSize],
                 SerialisationTestObjs = new List<SerialisationTestObj>()
             };
 

@@ -2,7 +2,6 @@
 using Prototype.Publisher.Contract;
 using Prototype.Publisher.Core.Enums;
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Prototype.Publisher.Presentation
 {

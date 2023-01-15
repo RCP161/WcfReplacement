@@ -12,7 +12,7 @@ namespace Prototype.Publisher.BL
         private readonly ICommunicationService _communicationService;
         private readonly ITestDataService _testDataService;
 
-        private int _presentStandardExecutionCounterValue = 1;
+        private int _presentStandardExecutionCounterValue = 10;
         private int _presentStandardExecutionCounter;
         private bool _presentStandardSuccessful;
         private double _presentStandardTotalResponseTime;
@@ -114,7 +114,7 @@ namespace Prototype.Publisher.BL
         public void EvaluateSerialisationPerformance()
         {
             int dataSize = DataSize10Kb;
-            int deep = 500;
+            int deep = 100;
             int executionCounterValue = 50;
             int executionCounter = executionCounterValue;
 

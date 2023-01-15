@@ -2,11 +2,13 @@
 {
     internal static class Constants
     {
-        internal static string LocalHost = "127.0.0.1";
+        internal const string LocalHost = "127.0.0.1";
+
+        internal const int MaxGrpcMessageSize = 6291456; // 6 MB
 
         internal const string InfoPrefix = "|| =>";
 
-        internal static string TestText =
+        internal const string TestText =
             "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
             "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam " +
             "voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet c" +
@@ -49,5 +51,6 @@
             "numy sed tempor et et invidunt justo labore Stet clita ea et gubergren, k" +
             "asd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem " +
             "ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur. ENDE";
+
     }
 }

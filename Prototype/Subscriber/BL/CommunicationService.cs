@@ -1,11 +1,11 @@
 ﻿using Grpc.Core;
 using Prototype.Logging.Contract;
 using Prototype.Publisher.BL;
-using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.Contract;
 using Prototype.Subscriber.Contract.Events;
 using Prototype.Testing.Contract;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Prototype.Subscriber.BL
@@ -31,7 +31,12 @@ namespace Prototype.Subscriber.BL
             _subscriberService = new SubscriberService(_testDataService, _log);
             _subscriberService.DataReceivedEvent += SubscriberService_DataReceivedEvent;
 
-            _server = new Server()
+            var options = new List<ChannelOption>()
+            {
+                new ChannelOption(ChannelOptions.MaxReceiveMessageLength, Constants.MaxGrpcMessageSize)
+            };
+
+            _server = new Server(options)
             {
                 Services = { SubscriberGrpcService.BindService(_subscriberService) },
                 Ports = { new ServerPort(localServerConfig.IpAdress, localServerConfig.PortNumber, ServerCredentials.Insecure) }

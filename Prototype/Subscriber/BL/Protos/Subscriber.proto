@@ -21,6 +21,7 @@ message SerialisationBinaryModel{
     bytes data=1;
     int32 dataSize=2;
     int32 deep=3;
+    int32 objectSize=4;
 }
 
 message SerialisationProtoModel{

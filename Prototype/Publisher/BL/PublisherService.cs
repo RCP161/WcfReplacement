@@ -27,7 +27,12 @@ namespace Prototype.Publisher.BL
                     PortNumber = request.PortNumber
                 };
 
-                var channel = new Channel(serverConfig.IpAdress, serverConfig.PortNumber, ChannelCredentials.Insecure);
+                var options = new List<ChannelOption>()
+                {
+                    new ChannelOption(ChannelOptions.MaxSendMessageLength, Constants.MaxGrpcMessageSize)
+                };
+
+                var channel = new Channel(serverConfig.IpAdress, serverConfig.PortNumber, ChannelCredentials.Insecure, options);
 
                 _subscribers.Add(serverConfig, channel);
 

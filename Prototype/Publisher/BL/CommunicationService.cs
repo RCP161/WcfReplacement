@@ -132,7 +132,8 @@ namespace Prototype.Publisher.BL
                     {
                         Data = Google.Protobuf.ByteString.CopyFrom(data),
                         DataSize = size,
-                        Deep = deep
+                        Deep = deep,
+                        ObjectSize = data.Length
                     };
 
                     var response = client.SerialisationBinaryPerformance(model);

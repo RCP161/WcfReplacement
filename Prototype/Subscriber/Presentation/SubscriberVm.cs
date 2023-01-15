@@ -9,6 +9,7 @@ namespace Prototype.Subscriber.Presentation
         private readonly ICommunicationService _communicationService;
         private readonly IServerConfig _localServerConfig;
         private IServerConfig _publisherServerConfig;
+        private int _dataCounter;
 
         public SubscriberVm(IServerConfig serverConfig)
         {
@@ -31,7 +32,8 @@ namespace Prototype.Subscriber.Presentation
 
         private void CommunicationService_DataReceivedEvent(object sender, Contract.Events.DataReceivedEventArgs e)
         {
-            Console.WriteLine($"{Constants.InfoPrefix}Data received fro {e.ScenarioName}");
+            _dataCounter++;
+            Console.WriteLine($"{Constants.InfoPrefix} {_dataCounter,6} Data received from {e.ScenarioName}");
         }
 
         #region Subscribe
