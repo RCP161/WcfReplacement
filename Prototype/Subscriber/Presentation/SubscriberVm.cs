@@ -26,6 +26,12 @@ namespace Prototype.Subscriber.Presentation
         private void StartServer()
         {
             _communicationService.StartServiceHost(_localServerConfig);
+            _communicationService.DataReceivedEvent += CommunicationService_DataReceivedEvent;
+        }
+
+        private void CommunicationService_DataReceivedEvent(object sender, Contract.Events.DataReceivedEventArgs e)
+        {
+            Console.WriteLine($"{Constants.InfoPrefix}Data received fro {e.ScenarioName}");
         }
 
         #region Subscribe

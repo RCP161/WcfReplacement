@@ -27,7 +27,7 @@ namespace Prototype.Publisher.BL
                     PortNumber = request.PortNumber
                 };
 
-                var channel = new Channel(_localServerConfig.IpAdress, _localServerConfig.PortNumber, ChannelCredentials.Insecure);
+                var channel = new Channel(serverConfig.IpAdress, serverConfig.PortNumber, ChannelCredentials.Insecure);
 
                 _subscribers.Add(serverConfig, channel);
 

@@ -2,30 +2,46 @@
 using Prototype.Testing.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Prototype.Testing.BL
 {
     internal class TestDataService : ITestDataService
     {
+        private byte[] _testArray;
+        private byte[] _textArray;
         private const int StartNumber = 1;
         private readonly TestObjSerialiser _testObjSerialiser;
 
         public TestDataService()
         {
             _testObjSerialiser = new TestObjSerialiser();
+
+            _testArray = new byte[0];
+            _textArray = Encoding.Unicode.GetBytes(Constants.TestText);
         }
 
         public byte[] CreateArray(int size)
         {
+            if(size > _testArray.Length)
+                ExpandTestArray(size);
+
             var array = new byte[size];
-            Array.Clear(array, 0, array.Length);
+            Array.Copy(_testArray, array, size);
             return array;
         }
 
         public bool IsTestArrayCorrect(byte[] data)
         {
-            throw new NotImplementedException();
+            if(data.Length > _testArray.Length)
+                ExpandTestArray(data.Length);
+
+            var array = new byte[data.Length];
+            Array.Copy(_testArray, array, data.Length);
+
+            return data.SequenceEqual(array);
         }
 
         public SerialisationTestObj CreateSerialisationTestObj(int deep, int dataSize)
@@ -33,21 +49,32 @@ namespace Prototype.Testing.BL
             return CreateSerialisationTestObj(StartNumber, deep, dataSize);
         }
 
+        private void ExpandTestArray(int size)
+        {
+            int iterations = (int)Math.Ceiling((double)size / _textArray.Length);
+            _testArray = new byte[_textArray.Length * iterations];
+
+            int index;
+
+            for(int i = 0; i < iterations; i++)
+            {
+                index = _textArray.Length * i;
+                Array.Copy(_textArray, 0, _testArray, index, _textArray.Length);
+            }
+        }
+
         private SerialisationTestObj CreateSerialisationTestObj(int number, int deep, int dataSize)
         {
-            if(deep == 0)
-                return null;
-
             SerialisationTestObj obj = new SerialisationTestObj()
             {
                 Name = $"TestObj {number,3}",
                 Number = number,
                 Data = CreateArray(dataSize),
                 SerialisationTestObjs = new List<SerialisationTestObj>()
-                {
-                    CreateSerialisationTestObj(number + 1, deep - 1, dataSize)
-                }
             };
+
+            if(deep > 0)
+                obj.SerialisationTestObjs.Add(CreateSerialisationTestObj(number + 1, deep - 1, dataSize));
 
             return obj;
         }
@@ -75,12 +102,6 @@ namespace Prototype.Testing.BL
 
         private bool IsCreateSerialisationTestObjCorrect(SerialisationTestObj obj, int deep, int dataSize, int number)
         {
-            if(deep == 0 && obj == null)
-                return true;
-            if(deep != 0 && obj == null ||
-                deep == 0 && obj != null)
-                return false;
-
             bool isChildValid;
             foreach(var child in obj.SerialisationTestObjs)
             {
@@ -95,5 +116,6 @@ namespace Prototype.Testing.BL
                 obj.Number == number &&
                 obj.Data.Length == obj.DataSize;
         }
+
     }
 }

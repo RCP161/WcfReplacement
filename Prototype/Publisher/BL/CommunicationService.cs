@@ -17,7 +17,7 @@ namespace Prototype.Publisher.BL
         private readonly Dictionary<ServerConfig, Channel> _subscribers;
         private readonly ILog _log;
 
-        public CommunicationService(Logging.Contract.ILog log)
+        public CommunicationService(ILog log)
         {
             _subscribers = new Dictionary<ServerConfig, Channel>();
             _log = log;
@@ -178,9 +178,6 @@ namespace Prototype.Publisher.BL
 
         private SerialisationProtoModel GetSerialisationProtoModel(SerialisationTestObj serialisationTestObj, int size, int deep)
         {
-            if(serialisationTestObj == null)
-                return null;
-
             var childs = new Google.Protobuf.Collections.RepeatedField<SerialisationProtoModel>();
 
             foreach(var child in serialisationTestObj.SerialisationTestObjs)

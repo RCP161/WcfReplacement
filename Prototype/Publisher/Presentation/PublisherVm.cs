@@ -2,6 +2,7 @@
 using Prototype.Publisher.Contract;
 using Prototype.Publisher.Core.Enums;
 using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Prototype.Publisher.Presentation
 {
@@ -10,8 +11,6 @@ namespace Prototype.Publisher.Presentation
         private readonly ServerConfig _localServerConfig;
         private readonly ICommunicationService _communicationService;
         private readonly IScenarioService _scenarioService;
-
-        private const string InfoPrefix = "|| =>";
 
         public PublisherVm(ServerConfig config)
         {
@@ -42,7 +41,7 @@ namespace Prototype.Publisher.Presentation
             if(!e.Subscribed)
                 action = "unsubscribed";
 
-            Console.WriteLine($"{InfoPrefix}{e.ServerConfig} {action}");
+            Console.WriteLine($"{Constants.InfoPrefix}{e.ServerConfig} {action}");
         }
 
         #endregion
@@ -106,7 +105,7 @@ namespace Prototype.Publisher.Presentation
                     _scenarioService.EvaluateSerialisationPerformance();
                     break;
                 default:
-                    throw new NotImplementedException();
+                    return;
             }
         }
 
@@ -116,7 +115,7 @@ namespace Prototype.Publisher.Presentation
             if(!e.Successful)
                 successful = "not successful";
 
-            Console.WriteLine($"{InfoPrefix}Scenario {e.Text} finished {successful}. Average execution time: {e.AverageExecutionTime} sec.");
+            Console.WriteLine($"{Constants.InfoPrefix}Scenario {e.Text} finished {successful}. Average execution time: {e.AverageExecutionTime} sec.");
         }
 
         #endregion

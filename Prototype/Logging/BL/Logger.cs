@@ -16,9 +16,6 @@ namespace Prototype.Logging.BL
             Console.WriteLine();
             Console.WriteLine("=============================================");
             Console.WriteLine();
-
-            if(_breakOnError)
-                Debugger.Break();
         }
     }
 }

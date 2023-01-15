@@ -2,7 +2,7 @@
 
 namespace Prototype.Subscriber.Contract.Events
 {
-    internal class DataRecievedEventArgs : EventArgs
+    internal class DataReceivedEventArgs : EventArgs
     {
         public string ScenarioName { get; set; }
     }

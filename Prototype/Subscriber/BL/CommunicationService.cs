@@ -29,7 +29,7 @@ namespace Prototype.Subscriber.BL
             _localServerConfig = localServerConfig;
 
             _subscriberService = new SubscriberService(_testDataService, _log);
-            _subscriberService.DataRecievedEvent += SubscriberService_DataRecievedEvent;
+            _subscriberService.DataReceivedEvent += SubscriberService_DataReceivedEvent;
 
             _server = new Server()
             {
@@ -89,17 +89,17 @@ namespace Prototype.Subscriber.BL
             }
         }
 
-        public event DataRecievedEventHandler DataRecievedEvent;
+        public event DataReceivedEventHandler DataReceivedEvent;
 
-        private void SubscriberService_DataRecievedEvent(object sender, DataRecievedEventArgs e)
+        private void SubscriberService_DataReceivedEvent(object sender, DataReceivedEventArgs e)
         {
-            DataRecievedEvent?.Invoke(sender, e);
+            DataReceivedEvent?.Invoke(sender, e);
         }
 
         public void Dispose()
         {
             if(_subscriberService != null)
-                _subscriberService.DataRecievedEvent -= SubscriberService_DataRecievedEvent;
+                _subscriberService.DataReceivedEvent -= SubscriberService_DataReceivedEvent;
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Prototype.Subscriber.Contract
         bool Subscribe(IServerConfig publisherServerConfig);
         bool Unsubscribe(IServerConfig publisherServerConfig);
 
-        event Events.DataRecievedEventHandler DataRecievedEvent;
+        event Events.DataReceivedEventHandler DataReceivedEvent;
     }
 }

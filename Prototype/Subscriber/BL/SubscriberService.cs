@@ -132,16 +132,16 @@ namespace Prototype.Subscriber.BL
             return obj;
         }
 
-        public event DataRecievedEventHandler DataRecievedEvent;
+        public event DataReceivedEventHandler DataReceivedEvent;
 
         private void RaiseSubscriberEvent(string scenarioName)
         {
-            var args = new DataRecievedEventArgs()
+            var args = new DataReceivedEventArgs()
             {
                 ScenarioName = scenarioName
             };
 
-            DataRecievedEvent?.Invoke(this, args);
+            DataReceivedEvent?.Invoke(this, args);
         }
     }
 }

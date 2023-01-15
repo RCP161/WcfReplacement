@@ -120,8 +120,8 @@
     <Compile Include="Publisher\BL\CommunicationService.cs" />
     <Compile Include="Publisher\Contract\Events\ScenarioFinishedEventArgs.cs" />
     <Compile Include="Publisher\Contract\Events\ScenarioFinishedEventHandler.cs" />
-    <Compile Include="Subscriber\Contract\Events\DataRecievedEventArgs.cs" />
-    <Compile Include="Subscriber\Contract\Events\DataRecievedEventHandler.cs" />
+    <Compile Include="Subscriber\Contract\Events\DataReceivedEventArgs.cs" />
+    <Compile Include="Subscriber\Contract\Events\DataReceivedEventHandler.cs" />
     <Compile Include="Testing\BL\TestDataService.cs" />
     <Compile Include="Publisher\BL\PublisherService.cs" />
     <Compile Include="Publisher\BL\ScenarioService.cs" />
