@@ -8,6 +8,7 @@ namespace Prototype.Testing.BL
 {
     internal class TestDataService : ITestDataService
     {
+        private const int StartNumber = 1;
         private readonly TestObjSerialiser _testObjSerialiser;
 
         public TestDataService()
@@ -29,27 +30,31 @@ namespace Prototype.Testing.BL
 
         public SerialisationTestObj CreateSerialisationTestObj(int deep, int dataSize)
         {
-            SerialisationTestObj obj = null;
+            return CreateSerialisationTestObj(StartNumber, deep, dataSize);
+        }
 
-            for(int i = 1; i <= deep; i++)
+        private SerialisationTestObj CreateSerialisationTestObj(int number, int deep, int dataSize)
+        {
+            if(deep == 0)
+                return null;
+
+            SerialisationTestObj obj = new SerialisationTestObj()
             {
-                obj = new SerialisationTestObj()
+                Name = $"TestObj {number,3}",
+                Number = number,
+                Data = CreateArray(dataSize),
+                SerialisationTestObjs = new List<SerialisationTestObj>()
                 {
-                    Name = $"TestObj {i,3}",
-                    Number = i,
-                    Data = CreateArray(dataSize),
-                    SerialisationTestObjs = new List<SerialisationTestObj>()
-                    {
-                        CreateSerialisationTestObj(deep - 1, dataSize)
-                    }
-                };
-            }
+                    CreateSerialisationTestObj(number + 1, deep - 1, dataSize)
+                }
+            };
 
             return obj;
         }
+
         public bool IsCreateSerialisationTestObjCorrect(SerialisationTestObj obj, int deep, int dataSize)
         {
-            return IsCreateSerialisationTestObjCorrect(obj, deep, dataSize, 1);
+            return IsCreateSerialisationTestObjCorrect(obj, deep, dataSize, StartNumber);
         }
 
         public byte[] CreateBinarySerialisationTestObj(int deep, int dataSize)

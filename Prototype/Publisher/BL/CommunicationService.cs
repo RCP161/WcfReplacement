@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Prototype.Logging.Contract;
 using Prototype.Publisher.Contract;
 using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.BL;
@@ -14,10 +15,12 @@ namespace Prototype.Publisher.BL
         private Server _server;
         private PublisherService _publisherService;
         private readonly Dictionary<ServerConfig, Channel> _subscribers;
+        private readonly ILog _log;
 
-        public CommunicationService()
+        public CommunicationService(Logging.Contract.ILog log)
         {
             _subscribers = new Dictionary<ServerConfig, Channel>();
+            _log = log;
         }
 
         public void StartServiceHost(IServerConfig localServerConfig)
@@ -44,9 +47,9 @@ namespace Prototype.Publisher.BL
                 {
                     client.Unsubscribed(new Google.Protobuf.WellKnownTypes.Empty());
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Log
+                    _log.Log(ex);
                 }
             }
 
@@ -74,9 +77,9 @@ namespace Prototype.Publisher.BL
                     if(!response.Successful)
                         successful = false;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Log
+                    _log.Log(ex);
                     successful = false;
                 }
             }
@@ -105,9 +108,9 @@ namespace Prototype.Publisher.BL
                     if(!response.Successful)
                         successful = false;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Log
+                    _log.Log(ex);
                     successful = false;
                 }
             }
@@ -137,9 +140,9 @@ namespace Prototype.Publisher.BL
                     if(!response.Successful)
                         successful = false;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Log
+                    _log.Log(ex);
                     successful = false;
                 }
             }
@@ -163,9 +166,9 @@ namespace Prototype.Publisher.BL
                     if(!response.Successful)
                         successful = false;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Log
+                    _log.Log(ex);
                     successful = false;
                 }
             }
@@ -175,6 +178,9 @@ namespace Prototype.Publisher.BL
 
         private SerialisationProtoModel GetSerialisationProtoModel(SerialisationTestObj serialisationTestObj, int size, int deep)
         {
+            if(serialisationTestObj == null)
+                return null;
+
             var childs = new Google.Protobuf.Collections.RepeatedField<SerialisationProtoModel>();
 
             foreach(var child in serialisationTestObj.SerialisationTestObjs)

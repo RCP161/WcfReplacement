@@ -5,7 +5,7 @@
         /// <summary>
         /// Ends the server
         /// </summary>
-        Stop = 1,
+        Stop,
         /// <summary>
         /// Request, 1s, 64 kb
         /// </summary>

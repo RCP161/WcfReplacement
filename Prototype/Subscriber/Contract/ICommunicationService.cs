@@ -8,5 +8,7 @@ namespace Prototype.Subscriber.Contract
         Task StopServiceHostAsync();
         bool Subscribe(IServerConfig publisherServerConfig);
         bool Unsubscribe(IServerConfig publisherServerConfig);
+
+        event Events.DataRecievedEventHandler DataRecievedEvent;
     }
 }

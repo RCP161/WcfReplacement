@@ -1,30 +1,39 @@
 ﻿using Grpc.Core;
+using Prototype.Logging.Contract;
 using Prototype.Publisher.BL;
+using Prototype.Publisher.Contract.Events;
 using Prototype.Subscriber.Contract;
+using Prototype.Subscriber.Contract.Events;
 using Prototype.Testing.Contract;
+using System;
 using System.Threading.Tasks;
 
 namespace Prototype.Subscriber.BL
 {
-    internal class CommunicationService : ICommunicationService
+    internal class CommunicationService : ICommunicationService, IDisposable
     {
         private readonly ITestDataService _testDataService;
+        private readonly ILog _log;
         private IServerConfig _localServerConfig;
+        private SubscriberService _subscriberService;
         private Server _server;
 
-        public CommunicationService(ITestDataService testDataService)
+        public CommunicationService(ITestDataService testDataService, ILog log)
         {
             _testDataService = testDataService;
+            _log = log;
         }
-
 
         public void StartServiceHost(IServerConfig localServerConfig)
         {
             _localServerConfig = localServerConfig;
 
+            _subscriberService = new SubscriberService(_testDataService, _log);
+            _subscriberService.DataRecievedEvent += SubscriberService_DataRecievedEvent;
+
             _server = new Server()
             {
-                Services = { SubscriberGrpcService.BindService(new SubscriberService(_testDataService)) },
+                Services = { SubscriberGrpcService.BindService(_subscriberService) },
                 Ports = { new ServerPort(localServerConfig.IpAdress, localServerConfig.PortNumber, ServerCredentials.Insecure) }
             };
 
@@ -51,9 +60,9 @@ namespace Prototype.Subscriber.BL
             {
                 return client.Subscribe(subscriberModel).Successful;
             }
-            catch
+            catch(Exception ex)
             {
-                // Log
+                _log.Log(ex);
                 return false;
             }
         }
@@ -73,11 +82,24 @@ namespace Prototype.Subscriber.BL
             {
                 return client.Unsubscribe(subscriberModel).Successful;
             }
-            catch
+            catch(Exception ex)
             {
-                // Log
+                _log.Log(ex);
                 return false;
             }
+        }
+
+        public event DataRecievedEventHandler DataRecievedEvent;
+
+        private void SubscriberService_DataRecievedEvent(object sender, DataRecievedEventArgs e)
+        {
+            DataRecievedEvent?.Invoke(sender, e);
+        }
+
+        public void Dispose()
+        {
+            if(_subscriberService != null)
+                _subscriberService.DataRecievedEvent -= SubscriberService_DataRecievedEvent;
         }
     }
 }

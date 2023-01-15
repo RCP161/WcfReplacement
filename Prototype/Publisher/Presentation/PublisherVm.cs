@@ -81,6 +81,8 @@ namespace Prototype.Publisher.Presentation
             var portText = Console.ReadLine();
             var isScenario = Enum.TryParse<Scenario>(portText, out Scenario scenario);
 
+            Console.WriteLine();
+
             if(!isScenario)
                 return null;
 

@@ -113,11 +113,15 @@
   <ItemGroup>
     <Compile Include="AppType.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Logging\BL\Logger.cs" />
+    <Compile Include="Logging\Contract\ILog.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publisher\BL\CommunicationService.cs" />
     <Compile Include="Publisher\Contract\Events\ScenarioFinishedEventArgs.cs" />
     <Compile Include="Publisher\Contract\Events\ScenarioFinishedEventHandler.cs" />
+    <Compile Include="Subscriber\Contract\Events\DataRecievedEventArgs.cs" />
+    <Compile Include="Subscriber\Contract\Events\DataRecievedEventHandler.cs" />
     <Compile Include="Testing\BL\TestDataService.cs" />
     <Compile Include="Publisher\BL\PublisherService.cs" />
     <Compile Include="Publisher\BL\ScenarioService.cs" />

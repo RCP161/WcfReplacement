@@ -36,5 +36,5 @@ message SerialisationProtoModel{
 
 message ResponseMessage{
     string message=1;
-    bool success=2;
+    bool successful=2;
 }

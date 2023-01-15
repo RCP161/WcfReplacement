@@ -2,6 +2,7 @@
 using Prototype.Publisher.Contract.Events;
 using Prototype.Testing.Contract;
 using System.Diagnostics;
+using System.Threading;
 using System.Timers;
 
 namespace Prototype.Publisher.BL
@@ -11,11 +12,11 @@ namespace Prototype.Publisher.BL
         private readonly ICommunicationService _communicationService;
         private readonly ITestDataService _testDataService;
 
-        private int _presentStandardExecutionCounterValue = 10;
+        private int _presentStandardExecutionCounterValue = 1;
         private int _presentStandardExecutionCounter;
         private bool _presentStandardSuccessful;
         private double _presentStandardTotalResponseTime;
-        private Timer _presentStandardTimer;
+        private System.Timers.Timer _presentStandardTimer;
 
         private const int DataSize10Kb = 10240;
         private const int DataSize64Kb = 65536;
@@ -26,7 +27,7 @@ namespace Prototype.Publisher.BL
             _communicationService = communicationService;
             _testDataService = testDataService;
 
-            _presentStandardTimer = new Timer();
+            _presentStandardTimer = new System.Timers.Timer();
             _presentStandardTimer.Elapsed += SendPresentStandardData;
         }
 
@@ -39,6 +40,9 @@ namespace Prototype.Publisher.BL
             _presentStandardTotalResponseTime = 0;
             _presentStandardExecutionCounter = _presentStandardExecutionCounterValue;
             _presentStandardTimer.Start();
+
+            while(_presentStandardExecutionCounter > 0)
+                Thread.Sleep(500);
         }
 
         private void SendPresentStandardData(object sender, ElapsedEventArgs e)

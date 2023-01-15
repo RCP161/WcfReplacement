@@ -2,7 +2,7 @@
 
 namespace Prototype.Testing.Core
 {
-    internal class SerialisationTestObj
+    public class SerialisationTestObj
     {
         public string Name { get; set; }
         public int Number { get; set; }

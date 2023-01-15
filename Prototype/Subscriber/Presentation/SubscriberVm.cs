@@ -38,12 +38,13 @@ namespace Prototype.Subscriber.Presentation
             {
                 Console.WriteLine();
                 Console.WriteLine("Please enter the port of the publisher port number:");
+                Console.WriteLine();
 
-                subscribed = TrySubscibtion();
+                subscribed = TrySubscribtion();
             }
         }
 
-        private bool TrySubscibtion()
+        private bool TrySubscribtion()
         {
             var portText = Console.ReadLine();
             var isNumber = Int32.TryParse(portText, out int portNumber);

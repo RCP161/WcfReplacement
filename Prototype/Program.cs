@@ -104,7 +104,7 @@ namespace Prototype
                 TcpListener tcpListener = new TcpListener(ipAddress, portNumber);
                 tcpListener.Start();
             }
-            catch(SocketException ex)
+            catch
             {
                 return false;
             }
@@ -118,7 +118,7 @@ namespace Prototype
 
         private static void RegisterServices()
         {
-            // Logger?
+            ServiceLocator.Default.RegisterType<Logging.Contract.ILog, Logging.BL.Logger>();
             ServiceLocator.Default.RegisterType<Testing.Contract.ITestDataService, Testing.BL.TestDataService>();
 
             switch(_appType)
