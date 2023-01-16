@@ -118,7 +118,7 @@ namespace Prototype.Publisher.BL
             return successful;
         }
 
-        public bool SendSerialisationBinaryPerformance(byte[] data, int size, int deep)
+        public bool SendSerialisationBinaryPerformance(byte[] data, int size)
         {
             bool successful = true;
 
@@ -132,7 +132,6 @@ namespace Prototype.Publisher.BL
                     {
                         Data = Google.Protobuf.ByteString.CopyFrom(data),
                         DataSize = size,
-                        Deep = deep,
                         ObjectSize = data.Length
                     };
 
@@ -151,7 +150,7 @@ namespace Prototype.Publisher.BL
             return successful;
         }
 
-        public bool SendSerialisationProtoPerformance(SerialisationTestObj serialisationTestObj, int size, int deep)
+        public bool SendSerialisationProtoPerformance(SerialisationTestObj serialisationTestObj, int size)
         {
             bool successful = true;
 
@@ -161,7 +160,7 @@ namespace Prototype.Publisher.BL
 
                 try
                 {
-                    var model = GetSerialisationProtoModel(serialisationTestObj, size, deep);
+                    var model = GetSerialisationProtoModel(serialisationTestObj, size);
                     var response = client.SerialisationProtoPerformance(model);
 
                     if(!response.Successful)
@@ -177,13 +176,13 @@ namespace Prototype.Publisher.BL
             return successful;
         }
 
-        private SerialisationProtoModel GetSerialisationProtoModel(SerialisationTestObj serialisationTestObj, int size, int deep)
+        private SerialisationProtoModel GetSerialisationProtoModel(SerialisationTestObj serialisationTestObj, int size)
         {
             var childs = new Google.Protobuf.Collections.RepeatedField<SerialisationProtoModel>();
 
             foreach(var child in serialisationTestObj.SerialisationTestObjs)
             {
-                childs.Add(GetSerialisationProtoModel(child, size, deep));
+                childs.Add(GetSerialisationProtoModel(child, size));
             }
 
             SerialisationProtoModel model = new SerialisationProtoModel()
@@ -191,7 +190,6 @@ namespace Prototype.Publisher.BL
                 Name = serialisationTestObj.Name,
                 Number = serialisationTestObj.Number,
                 DataSize = size,
-                Deep = deep,
                 Data = Google.Protobuf.ByteString.CopyFrom(serialisationTestObj.Data),
             };
 

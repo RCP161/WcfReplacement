@@ -78,9 +78,9 @@ namespace Prototype.Testing.BL
             return obj;
         }
 
-        public bool IsCreateSerialisationTestObjCorrect(SerialisationTestObj obj, int deep, int dataSize)
+        public bool IsSerialisationTestObjCorrect(SerialisationTestObj obj, int dataSize)
         {
-            return IsCreateSerialisationTestObjCorrect(obj, deep, dataSize, StartNumber);
+            return IsSerialisationTestObjCorrect(obj, dataSize, StartNumber);
         }
 
         public byte[] CreateBinarySerialisationTestObj(int deep, int dataSize)
@@ -91,20 +91,20 @@ namespace Prototype.Testing.BL
             return Encoding.UTF8.GetBytes(xml);
         }
 
-        public bool IsCreateSerialisationTestObjCorrect(byte[] data, int deep, int dataSize)
+        public bool IsSerialisationTestObjCorrect(byte[] data, int dataSize)
         {
             var xml = Encoding.UTF8.GetString(data);
             var testObj = _testObjSerialiser.DeserializeToXml(xml);
 
-            return IsCreateSerialisationTestObjCorrect(testObj, deep, dataSize);
+            return IsSerialisationTestObjCorrect(testObj, dataSize);
         }
 
-        private bool IsCreateSerialisationTestObjCorrect(SerialisationTestObj obj, int deep, int dataSize, int number)
+        private bool IsSerialisationTestObjCorrect(SerialisationTestObj obj, int dataSize, int number)
         {
             bool isChildValid;
             foreach(var child in obj.SerialisationTestObjs)
             {
-                isChildValid = IsCreateSerialisationTestObjCorrect(child, deep - 1, dataSize, number + 1);
+                isChildValid = IsSerialisationTestObjCorrect(child, dataSize, number + 1);
 
                 if(!isChildValid)
                     return false;
@@ -112,8 +112,7 @@ namespace Prototype.Testing.BL
 
             return obj.Name.Contains("TestObj ") &&
                 obj.Name.Contains(number.ToString()) &&
-                obj.Number == number &&
-                obj.Data.Length == obj.DataSize;
+                obj.Number == number;
         }
 
     }

@@ -57,7 +57,7 @@ namespace Prototype.Subscriber.BL
             if(!successful)
                 return GetFinishResponse(successful);
 
-            successful = _testDataService.IsCreateSerialisationTestObjCorrect(obj, request.Deep, request.DataSize);
+            successful = _testDataService.IsSerialisationTestObjCorrect(obj, request.DataSize);
             return GetFinishResponse(successful);
         }
 
@@ -66,7 +66,7 @@ namespace Prototype.Subscriber.BL
             RaiseSubscriberEvent("SerialisationPerformance - Proto");
 
             var serialisationTestObj = GetSerialisationTestObj(request);
-            bool successful = _testDataService.IsCreateSerialisationTestObjCorrect(serialisationTestObj, request.Deep, request.DataSize);
+            bool successful = _testDataService.IsSerialisationTestObjCorrect(serialisationTestObj, request.DataSize);
             return GetFinishResponse(successful);
         }
 
@@ -108,8 +108,7 @@ namespace Prototype.Subscriber.BL
 
         private SerialisationTestObj GetSerialisationTestObj(SerialisationProtoModel model)
         {
-            if(model.Deep == 0 &&
-                model.Number == 0 &&
+            if(model.Number == 0 &&
                 model.Name.Length == 0 &&
                 model.DataSize == 0 &&
                 model.Data.Length == 0)
@@ -119,7 +118,6 @@ namespace Prototype.Subscriber.BL
             {
                 Name = model.Name,
                 Number = model.Number,
-                DataSize = model.DataSize,
                 Data = new byte[model.DataSize],
                 SerialisationTestObjs = new List<SerialisationTestObj>()
             };

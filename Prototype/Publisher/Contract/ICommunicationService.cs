@@ -11,8 +11,8 @@ namespace Prototype.Publisher.Contract
 
         bool SendPresentStandad(byte[] data, int dataSize);
         bool SendRequestPerformance(byte[] data, int dataSize);
-        bool SendSerialisationBinaryPerformance(byte[] data, int size, int deep);
-        bool SendSerialisationProtoPerformance(SerialisationTestObj serialisationTestObj, int size, int deep);
+        bool SendSerialisationBinaryPerformance(byte[] data, int size);
+        bool SendSerialisationProtoPerformance(SerialisationTestObj serialisationTestObj, int size);
 
         event Events.SubscriberEventHandler SubscriberEvent;
     }

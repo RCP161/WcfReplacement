@@ -20,8 +20,7 @@ message TestByteArray{
 message SerialisationBinaryModel{
     bytes data=1;
     int32 dataSize=2;
-    int32 deep=3;
-    int32 objectSize=4;
+    int32 objectSize=3;
 }
 
 message SerialisationProtoModel{
@@ -30,9 +29,8 @@ message SerialisationProtoModel{
     string name=2;
     int32 number=3;
     int32 dataSize=4;
-    int32 deep=5;
-    bytes data=6;
-    repeated SerialisationProtoModel serialsiationTestObjs=7;
+    bytes data=5;
+    repeated SerialisationProtoModel serialsiationTestObjs=6;
 }
 
 message ResponseMessage{

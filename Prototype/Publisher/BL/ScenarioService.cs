@@ -128,7 +128,7 @@ namespace Prototype.Publisher.BL
                 var stopwatch = Stopwatch.StartNew();
 
                 var data = _testDataService.CreateSerialisationTestObj(deep, dataSize);
-                var result = _communicationService.SendSerialisationProtoPerformance(data, dataSize, deep);
+                var result = _communicationService.SendSerialisationProtoPerformance(data, dataSize);
 
                 stopwatch.Stop();
 
@@ -150,7 +150,7 @@ namespace Prototype.Publisher.BL
                 var stopwatch = Stopwatch.StartNew();
 
                 var data = _testDataService.CreateBinarySerialisationTestObj(deep, dataSize);
-                var result = _communicationService.SendSerialisationBinaryPerformance(data, dataSize, deep);
+                var result = _communicationService.SendSerialisationBinaryPerformance(data, dataSize);
 
                 stopwatch.Stop();
 
